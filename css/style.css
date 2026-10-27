@@ -1,5 +1,6 @@
 :root{--deep:#0b1e2e;--deep2:#071420;--ink:#04101a;--paper:#f2ead8;--paper2:#e8dcbf;--gold:#d9a441;--gold2:#f0c96a;--blue:#7fb6d9;--red:#e07a5f}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:radial-gradient(120% 80% at 50% 0%,#14324a 0%,var(--deep) 45%,var(--ink) 100%);color:var(--paper);font-family:"PingFang SC","Noto Sans SC",system-ui,sans-serif;line-height:1.6;min-height:100vh}
 body.large{font-size:18px}
 body.no-motion .fog,body.no-motion #rainCanvas{display:none}
