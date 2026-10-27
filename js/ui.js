@@ -2,14 +2,19 @@
 let toastTimer = null;
 function toast(msg) {
   const el = document.getElementById("toast");
-  el.textContent = msg; el.hidden = false;
+  el.textContent = msg; el.hidden = false; el.style.display = "block";
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.hidden = true; }, 3200);
+  toastTimer = setTimeout(() => { el.hidden = true; el.style.display = "none"; }, 3200);
 }
 function showView(id) {
-  ["view-home", "view-game", "view-ending"].forEach(v => { document.getElementById(v).hidden = (v !== id); });
-  document.getElementById("topbar").hidden = (id === "view-home");
-  document.getElementById("app").hidden = false;
+  ["view-home", "view-game", "view-ending"].forEach(v => {
+    const el = document.getElementById(v);
+    el.hidden = (v !== id); el.style.display = (v === id ? "block" : "none");
+  });
+  const tb = document.getElementById("topbar");
+  tb.hidden = (id === "view-home"); tb.style.display = (id === "view-home" ? "none" : "flex");
+  const app = document.getElementById("app");
+  app.hidden = false; app.style.display = "block";
 }
 function openModal(title, bodyHTML, actions) {
   document.getElementById("modalTitle").textContent = title;
@@ -22,9 +27,13 @@ function openModal(title, bodyHTML, actions) {
     box.appendChild(b);
   });
   setModalFeedback("");
-  document.getElementById("modalBackdrop").hidden = false;
+  const bd = document.getElementById("modalBackdrop");
+  bd.hidden = false; bd.style.display = "flex";
 }
-function closeModal() { document.getElementById("modalBackdrop").hidden = true; }
+function closeModal() {
+  const bd = document.getElementById("modalBackdrop");
+  bd.hidden = true; bd.style.display = "none";
+}
 function setModalFeedback(msg, ok) {
   const el = document.getElementById("modalFeedback");
   el.textContent = msg; el.className = "feedback" + (ok === true ? " ok" : ok === false ? " bad" : "");
