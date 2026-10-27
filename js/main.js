@@ -30,7 +30,11 @@ function initTabs() {
   });
 }
 function initScene() {
-  document.querySelectorAll(".hotspot").forEach(b => b.onclick = () => investigate(b.dataset.item));
+  document.querySelectorAll(".hotspot, .scene-list button").forEach(b => b.onclick = () => investigate(b.dataset.item));
+}
+function startNewGame() {
+  AudioFX.click(); AudioFX.startRain();
+  clearSave(); S.startedAt = Date.now(); saveNow(); renderAll(); showView("view-game");
 }
 function initSettings() {
   const bind = (id, key, fn) => {
@@ -59,8 +63,7 @@ function initSettings() {
     r.readAsText(f);
   };
   document.getElementById("btnClearSave").onclick = () => {
-    if (!confirm("确定清除本地存档并重开吗？成就也会一起清掉（导出备份可以先保住）。")) return;
-    clearSave(); saveNow(); location.reload();
+    showConfirm("清除存档？", "本地存档和成就都会清掉。想保住进度的话，先点“导出存档备份”，再回来清除。", "确认清除", () => { clearSave(); saveNow(); location.reload(); });
   };
   document.getElementById("btnHome").onclick = () => showView("view-home");
 }
@@ -74,9 +77,11 @@ function initHome() {
     toast(saved ? "欢迎回来，进度已恢复。" : "新的一夜开始了。先调查旧录音机。");
   };
   document.getElementById("btnNew").onclick = () => {
-    if ((S.clues.length || S.solved.length) && !confirm("开始新的一夜会覆盖当前进度。先导出备份吗？点“取消”可以先去设置里导出。")) return;
-    AudioFX.click(); AudioFX.startRain();
-    clearSave(); S.startedAt = Date.now(); saveNow(); renderAll(); showView("view-game");
+    if (S.clues.length || S.solved.length) {
+      showConfirm("开始新的一夜？", "这会覆盖当前进度。想先保住进度的话，先去设置里导出存档备份，再回来重开。", "确认重开", startNewGame);
+    } else {
+      startNewGame();
+    }
   };
   document.getElementById("btnHow").onclick = () => { document.getElementById("howCard").hidden = false; };
   document.getElementById("btnCloseHow").onclick = () => { document.getElementById("howCard").hidden = true; };

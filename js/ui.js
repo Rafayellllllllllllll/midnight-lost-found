@@ -34,6 +34,13 @@ function closeModal() {
   const bd = document.getElementById("modalBackdrop");
   bd.hidden = true; bd.style.display = "none";
 }
+/* 页面内确认框：不用浏览器自带的 confirm()，那种框在部分环境里会被直接按取消，看起来像按钮死了。 */
+function showConfirm(title, body, confirmText, onConfirm) {
+  openModal(title, "<p>" + body + "</p>", [
+    { text: confirmText, cls: "gold", onClick: () => { closeModal(); onConfirm(); } },
+    { text: "取消", onClick: closeModal }
+  ]);
+}
 function setModalFeedback(msg, ok) {
   const el = document.getElementById("modalFeedback");
   el.textContent = msg; el.className = "feedback" + (ok === true ? " ok" : ok === false ? " bad" : "");
